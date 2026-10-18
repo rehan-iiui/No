@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -96,7 +97,7 @@ h1{font-size:clamp(28px,4vw,42px);line-height:1.1;letter-spacing:-1.6px;margin:7
 .color-choice:hover{transform:scale(1.1)}.color-choice.selected{outline:2px solid white;outline-offset:3px}
 .editor-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:21px}
 .editor-bottom .right{display:flex;gap:9px}
-.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:20;padding:12px 17px;border-radius:14px;border:1px solid var(--line);background:rgba(37,43,83,.9);backdrop-filter:blur(20px);box-shadow:var(--shadow);font-size:13px;transition:.25s}
+.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:40;padding:12px 17px;border-radius:14px;border:1px solid var(--line);background:rgba(37,43,83,.9);backdrop-filter:blur(20px);box-shadow:var(--shadow);font-size:13px;transition:.25s}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 footer{text-align:center;color:rgba(255,255,255,.42);font-size:11px;margin-top:42px}
 @media(max-width:650px){
@@ -108,7 +109,6 @@ footer{text-align:center;color:rgba(255,255,255,.42);font-size:11px;margin-top:4
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 
-/* AI workspace: separate full-screen view; notes UI remains intact underneath */
 .ai-screen{position:fixed;inset:0;z-index:30;display:none;flex-direction:column;color:#202338;background:linear-gradient(145deg,#fff 0%,#f7f8fc 48%,#e9ecf5 100%);}
 .ai-screen.open{display:flex}
 .ai-header{height:76px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 clamp(16px,3vw,42px);border-bottom:1px solid rgba(46,53,86,.1);background:rgba(255,255,255,.72);backdrop-filter:blur(24px)}
@@ -121,7 +121,6 @@ footer{text-align:center;color:rgba(255,255,255,.42);font-size:11px;margin-top:4
 .ai-messages{width:min(780px,100%);display:flex;flex-direction:column;gap:18px;margin:0 auto 20px}.ai-message{max-width:88%;padding:15px 17px;border-radius:19px;font-size:14px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}.ai-message.user{align-self:flex-end;background:linear-gradient(135deg,#e7e9ff,#f0f1ff);border:1px solid #d9dcfb;color:#333858;border-bottom-right-radius:6px}.ai-message.assistant{align-self:flex-start;background:rgba(255,255,255,.86);border:1px solid rgba(58,64,100,.1);color:#3c4158;border-bottom-left-radius:6px;box-shadow:0 6px 20px rgba(45,52,90,.045)}.ai-message .message-label{font-size:10px;letter-spacing:.7px;text-transform:uppercase;font-weight:750;color:#8a8fa7;display:block;margin-bottom:5px}.ai-message a{color:#626ac0}
 .ai-bottom{flex-shrink:0;padding:12px 18px max(18px,env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(246,247,252,0),rgba(246,247,252,.94) 20%)}.ai-composer{width:min(820px,100%);margin:auto;border:1px solid rgba(64,70,110,.18);border-radius:23px;background:rgba(255,255,255,.93);box-shadow:0 12px 38px rgba(48,54,97,.1),inset 0 1px 0 #fff;padding:10px 11px 9px;transition:border-color .18s,box-shadow .18s}.ai-composer:focus-within{border-color:#b7bcef;box-shadow:0 12px 38px rgba(80,87,160,.13),0 0 0 3px rgba(140,146,230,.09)}.ai-composer textarea{display:block;width:100%;min-height:48px;max-height:150px;resize:vertical;border:0;outline:0;background:transparent;color:#292d43;padding:10px 10px 8px;font-size:14px;line-height:1.55}.ai-composer textarea::placeholder{color:#9a9eb0}.ai-composer-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 3px 0}.ai-attach{display:flex;align-items:center;gap:8px;padding:9px 11px;border-radius:12px;border:1px solid rgba(58,64,100,.12);background:#f7f8fc;color:#626982;font-size:12px;transition:.18s}.ai-attach:hover{background:#eff0ff;border-color:#d5d8fb}.ai-attach svg{width:17px;height:17px}.ai-send{width:40px;height:40px;display:grid;place-items:center;border:0;border-radius:13px;background:linear-gradient(145deg,#777ed5,#6269bc);color:#fff;box-shadow:0 5px 13px rgba(99,105,190,.25);transition:.18s}.ai-send:hover{transform:translateY(-2px);filter:brightness(1.06)}.ai-send:disabled{opacity:.45;cursor:not-allowed;transform:none}.ai-send svg{width:18px;height:18px}.ai-file-name{font-size:11px;color:#727894;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 8px}.ai-disclaimer{text-align:center;font-size:10px;color:#9a9eb0;margin:10px 0 0}.ai-typing{display:flex;gap:5px;align-items:center;padding:4px 0}.ai-typing i{width:6px;height:6px;border-radius:50%;background:#969bd8;animation:typing 1s infinite ease-in-out}.ai-typing i:nth-child(2){animation-delay:.15s}.ai-typing i:nth-child(3){animation-delay:.3s}@keyframes typing{0%,60%,100%{opacity:.35;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
 @media(max-width:600px){.ai-header{height:66px;padding:0 14px}.ai-content{padding:18px 13px}.ai-suggestions{grid-template-columns:1fr}.ai-welcome{padding:18px 0 28px}.ai-message{max-width:95%}.ai-bottom{padding-left:11px;padding-right:11px}.ai-attach span{display:none}}
-
 </style>
 </head>
 <body>
@@ -171,14 +170,10 @@ footer{text-align:center;color:rgba(255,255,255,.42);font-size:11px;margin-top:4
  <div class="ai-content" id="aiContent">
   <section class="ai-welcome" id="aiWelcome"><div class="ai-big-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 2.2 6.3L21 11l-6.8 2.7L12 20l-2.2-6.3L3 11l6.8-2.7L12 2Z"/><path d="m19 15 .9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15Z"/></svg></div><h1>What can I help you with?</h1><p>Summarize, organize your thoughts, turn meeting notes into action items, or get help with a story.</p></section>
   <div class="ai-suggestions" id="aiSuggestions">
-   <button class="ai-suggestion" type="button" data-prompt="Turn these meeting notes into a clear summary with decisions and action items:
-"><strong>▤ Meeting notes</strong><span>Summaries, decisions and action items</span></button>
-   <button class="ai-suggestion" type="button" data-prompt="Summarize this text in simple, clear points:
-"><strong>≡ Summarize text</strong><span>Get the main ideas quickly</span></button>
-   <button class="ai-suggestion" type="button" data-prompt="Help me plan and write a good story about this idea:
-"><strong>✎ Story writing</strong><span>Build a story from your idea</span></button>
-   <button class="ai-suggestion" type="button" data-prompt="Rewrite the following text to make it clearer and better organized:
-"><strong>✧ Improve writing</strong><span>Make writing clearer and more polished</span></button>
+   <button class="ai-suggestion" type="button" data-prompt="Turn these meeting notes into a clear summary with decisions and action items:\n"><strong>▤ Meeting notes</strong><span>Summaries, decisions and action items</span></button>
+   <button class="ai-suggestion" type="button" data-prompt="Summarize this text in simple, clear points:\n"><strong>≡ Summarize text</strong><span>Get the main ideas quickly</span></button>
+   <button class="ai-suggestion" type="button" data-prompt="Help me plan and write a good story about this idea:\n"><strong>✎ Story writing</strong><span>Build a story from your idea</span></button>
+   <button class="ai-suggestion" type="button" data-prompt="Rewrite the following text to make it clearer and better organized:\n"><strong>✧ Improve writing</strong><span>Make writing clearer and more polished</span></button>
   </div>
   <div class="ai-messages" id="aiMessages" aria-live="polite"></div>
  </div>
@@ -187,6 +182,8 @@ footer{text-align:center;color:rgba(255,255,255,.42);font-size:11px;margin-top:4
 
 <script>
 (() => {
+ "use strict";
+
  const STORAGE_KEY = "notepad-glass-notes-v1";
  const tints = [
   {name:"Clear",value:"transparent"},
@@ -199,17 +196,41 @@ footer{text-align:center;color:rgba(255,255,255,.42);font-size:11px;margin-top:4
  const $ = id => document.getElementById(id);
  const searchInput=$("searchInput"), overlay=$("editorOverlay"), form=$("noteForm");
  let notes=loadNotes(), editingId=null, selectedTint="transparent", toastTimer;
- function loadNotes(){try{const parsed=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");return Array.isArray(parsed)?parsed.filter(n=>n&&typeof n.id==="string"):[]}catch{return []}}
- function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(notes));return true}catch{showToast("Could not save. Browser storage may be full.");return false}}
- function escapeHTML(s=""){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+
+ function loadNotes(){
+  try{
+   const parsed=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
+   return Array.isArray(parsed)?parsed.filter(n=>n&&typeof n.id==="string"):[];
+  }catch{return []}
+ }
+ function save(){
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(notes));return true}
+  catch{showToast("Could not save. Browser storage may be full.");return false}
+ }
+ function escapeHTML(s=""){
+  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ }
  function safeTint(value){return tints.some(t=>t.value===value)?value:"transparent"}
- function dateLabel(iso){const d=new Date(iso);if(Number.isNaN(d.getTime()))return "Recently";return d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:d.getFullYear()!==new Date().getFullYear()?"numeric":undefined})}
- function showToast(msg){const el=$("toast");el.textContent=msg;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2300)}
- function icon(name){const paths={
-  pin:'<path d="m16 3 5 5-4 1-4 4-1 5-2-2-4 4-1-1 4-4-2-2 5-1 4-4z"/>',
-  edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/>',
-  trash:'<path d="M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6m4 4v6m6-6v6"/>'
- };return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name]}</svg>`}
+ function dateLabel(iso){
+  const d=new Date(iso);
+  if(Number.isNaN(d.getTime()))return "Recently";
+  return d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:d.getFullYear()!==new Date().getFullYear()?"numeric":undefined});
+ }
+ function showToast(msg){
+  const el=$("toast");
+  el.textContent=msg;
+  el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove("show"),2300);
+ }
+ function icon(name){
+  const paths={
+   pin:'<path d="m16 3 5 5-4 1-4 4-1 5-2-2-4 4-1-1 4-4-2-2 5-1 4-4z"/>',
+   edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/>',
+   trash:'<path d="M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6m4 4v6m6-6v6"/>'
+  };
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name]}</svg>`;
+ }
  function card(note){
   const title=escapeHTML(note.title||"Untitled note"),body=escapeHTML(note.body||"No additional text.");
   return `<article class="note" style="--note-tint:${safeTint(note.tint)}" data-note-id="${escapeHTML(note.id)}">
@@ -219,10 +240,10 @@ footer{text-align:center;color:rgba(255,255,255,.42);font-size:11px;margin-top:4
    <button class="icon-btn" data-action="delete" data-id="${escapeHTML(note.id)}" title="Delete note" aria-label="Delete note">${icon("trash")}</button></div></div>
    <h3>${title}</h3><div class="note-body">${body}</div>
    <div class="note-footer"><span class="tag">${note.body&&note.body.trim()?"Note":"Quick note"}</span>${note.pinned?'<span class="pin-label">✦ Pinned</span>':`<span class="pin-label">${(note.body||"").length} chars</span>`}</div>
-  </article>`
+  </article>`;
  }
  function emptyMarkup(searching){
-  return `<div class="empty"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3.5h8l4 4V20a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 5 20V5A1.5 1.5 0 0 1 6.5 3.5Z"/><path d="M14 4v4h4M8 13h8M8 16h5"/></svg></div><h3>${searching?"No matching notes":"Your space is ready"}</h3><p>${searching?"Try a different note title.":"Create your first note and let the ideas flow."}</p>${searching?"":'<button class="btn primary" data-action="new">＋ Create your first note</button>'}</div>`
+  return `<div class="empty"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3.5h8l4 4V20a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 5 20V5A1.5 1.5 0 0 1 6.5 3.5Z"/><path d="M14 4v4h4M8 13h8M8 16h5"/></svg></div><h3>${searching?"No matching notes":"Your space is ready"}</h3><p>${searching?"Try a different note title.":"Create your first note and let the ideas flow."}</p>${searching?"":'<button class="btn primary" data-action="new">＋ Create your first note</button>'}</div>`;
  }
  function render(){
   const q=searchInput.value.trim().toLocaleLowerCase();
@@ -238,63 +259,273 @@ footer{text-align:center;color:rgba(255,255,255,.42);font-size:11px;margin-top:4
   $("notesGrid").innerHTML=regular.length?regular.map(card).join(""):(!pinned.length?emptyMarkup(!!q):"");
  }
  function openEditor(note=null){
-  editingId=note?note.id:null;selectedTint=note?safeTint(note.tint):"transparent";
+  editingId=note?note.id:null;
+  selectedTint=note?safeTint(note.tint):"transparent";
   $("editorTitle").textContent=note?"Edit note":"Create a note";
-  $("noteTitle").value=note?.title||"";$("noteBody").value=note?.body||"";
+  $("noteTitle").value=note?.title||"";
+  $("noteBody").value=note?.body||"";
   $("deleteInEditor").hidden=!note;
-  renderColors();overlay.classList.add("open");document.body.style.overflow="hidden";
+  renderColors();
+  overlay.classList.add("open");
+  document.body.style.overflow="hidden";
   setTimeout(()=>$("noteTitle").focus(),50);
  }
- function closeEditor(){overlay.classList.remove("open");document.body.style.overflow="";editingId=null;form.reset()}
- function renderColors(){$("colorChoices").innerHTML=tints.map(t=>`<button type="button" class="color-choice ${t.value===selectedTint?"selected":""}" data-tint="${escapeHTML(t.value)}" title="${t.name}" aria-label="${t.name}" aria-pressed="${t.value===selectedTint}" style="background:${t.value==="transparent"?"rgba(255,255,255,.12)":t.value}"></button>`).join("")}
- function deleteNote(id){const note=notes.find(n=>n.id===id);if(!note)return;if(!confirm(`Delete "${note.title||"Untitled note"}"? This cannot be undone.`))return;notes=notes.filter(n=>n.id!==id);save();render();showToast("Note deleted")}
+ function closeEditor(){
+  overlay.classList.remove("open");
+  document.body.style.overflow="";
+  editingId=null;
+  form.reset();
+ }
+ function renderColors(){
+  $("colorChoices").innerHTML=tints.map(t=>`<button type="button" class="color-choice ${t.value===selectedTint?"selected":""}" data-tint="${escapeHTML(t.value)}" title="${t.name}" aria-label="${t.name}" aria-pressed="${t.value===selectedTint}" style="background:${t.value==="transparent"?"rgba(255,255,255,.12)":t.value}"></button>`).join("");
+ }
+ function deleteNote(id){
+  const note=notes.find(n=>n.id===id);
+  if(!note)return;
+  if(!confirm(`Delete "${note.title||"Untitled note"}"? This cannot be undone.`))return;
+  notes=notes.filter(n=>n.id!==id);
+  save();render();showToast("Note deleted");
+ }
+
  $("newNoteBtn").addEventListener("click",()=>openEditor());
- $("closeEditor").addEventListener("click",closeEditor);$("cancelEditor").addEventListener("click",closeEditor);
+ $("closeEditor").addEventListener("click",closeEditor);
+ $("cancelEditor").addEventListener("click",closeEditor);
  overlay.addEventListener("click",e=>{if(e.target===overlay)closeEditor()});
- document.addEventListener("keydown",e=>{if(e.key==="Escape"&&overlay.classList.contains("open"))closeEditor();if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();searchInput.focus()}if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="n"){e.preventDefault();openEditor()}});
- searchInput.addEventListener("input",render);
- form.addEventListener("submit",e=>{
-  e.preventDefault();const title=$("noteTitle").value.trim();if(!title){$("noteTitle").focus();return}
-  const now=new Date().toISOString();
-  if(editingId){const n=notes.find(n=>n.id===editingId);if(n){n.title=title;n.body=$("noteBody").value;n.tint=selectedTint;n.updatedAt=now}}
-  else notes.push({id:crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2),title,body:$("noteBody").value,tint:selectedTint,pinned:false,createdAt:now,updatedAt:now});
-  save();closeEditor();render();showToast(editingId?"Note updated":"Note saved");
+ document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&overlay.classList.contains("open"))closeEditor();
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();searchInput.focus()}
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="n"){e.preventDefault();openEditor()}
  });
- $("colorChoices").addEventListener("click",e=>{const b=e.target.closest("[data-tint]");if(!b)return;selectedTint=b.dataset.tint;renderColors()});
+ searchInput.addEventListener("input",render);
+
+ form.addEventListener("submit",e=>{
+  e.preventDefault();
+  const title=$("noteTitle").value.trim();
+  if(!title){$("noteTitle").focus();return}
+  const wasEditing=Boolean(editingId);
+  const now=new Date().toISOString();
+  if(editingId){
+   const n=notes.find(n=>n.id===editingId);
+   if(n){n.title=title;n.body=$("noteBody").value;n.tint=selectedTint;n.updatedAt=now}
+  }else{
+   notes.push({
+    id:crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2),
+    title,body:$("noteBody").value,tint:selectedTint,pinned:false,createdAt:now,updatedAt:now
+   });
+  }
+  save();closeEditor();render();showToast(wasEditing?"Note updated":"Note saved");
+ });
+
+ $("colorChoices").addEventListener("click",e=>{
+  const b=e.target.closest("[data-tint]");
+  if(!b)return;
+  selectedTint=b.dataset.tint;renderColors();
+ });
+
  document.addEventListener("click",e=>{
-  const b=e.target.closest("[data-action]");if(!b)return;const {action,id}=b.dataset;
+  const b=e.target.closest("[data-action]");
+  if(!b)return;
+  const {action,id}=b.dataset;
   if(action==="new"){openEditor();return}
-  const note=notes.find(n=>n.id===id);if(!note)return;
+  const note=notes.find(n=>n.id===id);
+  if(!note)return;
   if(action==="edit")openEditor(note);
-  if(action==="pin"){note.pinned=!note.pinned;note.updatedAt=new Date().toISOString();save();render();showToast(note.pinned?"Note pinned":"Note unpinned")}
+  if(action==="pin"){
+   note.pinned=!note.pinned;
+   note.updatedAt=new Date().toISOString();
+   save();render();showToast(note.pinned?"Note pinned":"Note unpinned");
+  }
   if(action==="delete")deleteNote(id);
  });
- $("deleteInEditor").addEventListener("click",()=>{if(editingId){const id=editingId;closeEditor();deleteNote(id)}});
+ $("deleteInEditor").addEventListener("click",()=>{
+  if(editingId){const id=editingId;closeEditor();deleteNote(id)}
+ });
 
- // NotePad AI screen and chat interface
- const aiScreen=$("aiScreen"), aiInput=$("aiInput"), aiMessages=$("aiMessages"), aiContent=$("aiContent");
- let aiBusy=false, attachedFiles=[];
- function openAi(){aiScreen.classList.add("open");aiScreen.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";setTimeout(()=>aiInput.focus(),80)}
- function closeAi(){aiScreen.classList.remove("open");aiScreen.setAttribute("aria-hidden","true");document.body.style.overflow="";$("talkAiBtn").focus()}
- $("talkAiBtn").addEventListener("click",openAi);$("closeAiBtn").addEventListener("click",closeAi);
- document.addEventListener("keydown",e=>{if(e.key==="Escape"&&aiScreen.classList.contains("open"))closeAi()});
+ // NotePad AI
+ const aiScreen=$("aiScreen"),aiInput=$("aiInput"),aiMessages=$("aiMessages"),aiContent=$("aiContent");
+ let aiBusy=false,attachedFiles=[];
+
+ function openAi(){
+  aiScreen.classList.add("open");
+  aiScreen.setAttribute("aria-hidden","false");
+  document.body.style.overflow="hidden";
+  setTimeout(()=>aiInput.focus(),80);
+ }
+ function closeAi(){
+  aiScreen.classList.remove("open");
+  aiScreen.setAttribute("aria-hidden","true");
+  document.body.style.overflow="";
+  $("talkAiBtn").focus();
+ }
+ $("talkAiBtn").addEventListener("click",openAi);
+ $("closeAiBtn").addEventListener("click",closeAi);
+ document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&aiScreen.classList.contains("open"))closeAi();
+ });
+
  $("aiAttachBtn").addEventListener("click",()=>$("aiFileInput").click());
- $("aiFileInput").addEventListener("change",async e=>{
-  attachedFiles=Array.from(e.target.files||[]);$("aiFileName").textContent=attachedFiles.map(f=>f.name).join(", ");
+
+ $("aiFileInput").addEventListener("change",e=>{
+  attachedFiles=Array.from(e.target.files||[]);
+  $("aiFileName").textContent=attachedFiles.map(f=>f.name).join(", ");
   if(attachedFiles.length)showToast(`${attachedFiles.length} file${attachedFiles.length===1?"":"s"} attached`);
  });
- document.querySelectorAll("[data-prompt]").forEach(b=>b.addEventListener("click",()=>{aiInput.value=b.dataset.prompt;aiInput.focus();aiInput.setSelectionRange(aiInput.value.length,aiInput.value.length)}));
- function addAiMessage(role,text){const div=document.createElement("div");div.className="ai-message "+role;const label=document.createElement("span");label.className="message-label";label.textContent=role==="user"?"You":"NotePad AI";const content=document.createElement("div");content.textContent=text;div.append(label,content);aiMessages.appendChild(div);aiContent.scrollTop=aiContent.scrollHeight;return div}
- function readTextFile(file){return new Promise(resolve=>{if(file.size>1_000_000){resolve(`[${file.name}: file is larger than 1 MB; not read in browser]`);return}if(/\.(txt|md|csv|json|html|css|js|py)$/i.test(file.name)||file.type.startsWith("text/")){const r=new FileReader();r.onload=()=>resolve(`\n\n[Attached file: ${file.name}]\n${String(r.result||"").slice(0,20000)}`);r.onerror=()=>resolve(`[Could not read ${file.name}]`);r.readAsText(file)}else resolve(`[Attached file: ${file.name} (${file.type||"unknown type"}). This file is attached in the interface, but this browser-only version does not extract its contents.]`)} )}
- async function sendAiMessage(prefill){if(aiBusy)return;let prompt=(typeof prefill==="string"?prefill:aiInput.value).trim();if(!prompt&&!attachedFiles.length)return;let fileContext="";for(const f of attachedFiles)fileContext+=await readTextFile(f);if(!prompt)prompt="Please help me with the attached file(s).";const displayText=prompt+(attachedFiles.length?"\n\nAttached: "+attachedFiles.map(f=>f.name).join(", "):"");$("aiWelcome").style.display="none";$("aiSuggestions").style.display="none";addAiMessage("user",displayText);aiInput.value="";attachedFiles=[];$("aiFileInput").value="";$("aiFileName").textContent="";aiBusy=true;$("aiSendBtn").disabled=true;const typing=document.createElement("div");typing.className="ai-message assistant";typing.innerHTML='<span class="message-label">NotePad AI</span><div class="ai-typing"><i></i><i></i><i></i></div>';aiMessages.appendChild(typing);aiContent.scrollTop=aiContent.scrollHeight;
-  try{
-   const response=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:prompt+fileContext,history:Array.from(aiMessages.querySelectorAll(".ai-message")).filter(m=>m!==typing).map(m=>({role:m.classList.contains("user")?"user":"assistant",content:m.querySelector("div")?.textContent||""})).slice(-12)})});
-   if(!response.ok)throw new Error(`AI endpoint returned HTTP ${response.status}`);const data=await response.json();const reply=data.reply||data.output||data.response||data.text;if(typeof reply!=="string"||!reply.trim())throw new Error("The AI endpoint returned no reply.");typing.remove();addAiMessage("assistant",reply.trim());
-  }catch(err){typing.remove();addAiMessage("assistant","The AI service is not connected yet. To get real AI replies, connect your Replicate model through your Vercel backend at /api/chat. Keep your API token on the server, not in this HTML.\n\nYou can still use this screen and its message composer; once the endpoint is configured, replies will appear here.");}
-  finally{aiBusy=false;$("aiSendBtn").disabled=false;aiInput.focus()}
+
+ document.querySelectorAll("[data-prompt]").forEach(b=>{
+  b.addEventListener("click",()=>{
+   aiInput.value=b.dataset.prompt;
+   aiInput.focus();
+   aiInput.setSelectionRange(aiInput.value.length,aiInput.value.length);
+  });
+ });
+
+ function addAiMessage(role,text){
+  const div=document.createElement("div");
+  div.className="ai-message "+role;
+  const label=document.createElement("span");
+  label.className="message-label";
+  label.textContent=role==="user"?"You":"NotePad AI";
+  const content=document.createElement("div");
+  content.textContent=text;
+  div.append(label,content);
+  aiMessages.appendChild(div);
+  aiContent.scrollTop=aiContent.scrollHeight;
+  return div;
  }
- $("aiForm").addEventListener("submit",e=>{e.preventDefault();sendAiMessage()});
- aiInput.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();$("aiForm").requestSubmit()}});
+
+ function readTextFile(file){
+  return new Promise(resolve=>{
+   if(file.size>1_000_000){
+    resolve(`\n\n[${file.name}: file is larger than 1 MB; not read in browser]`);
+    return;
+   }
+   if(/\.(txt|md|csv|json|html|css|js|py)$/i.test(file.name)||file.type.startsWith("text/")){
+    const r=new FileReader();
+    r.onload=()=>resolve(`\n\n[Attached file: ${file.name}]\n${String(r.result||"").slice(0,20000)}`);
+    r.onerror=()=>resolve(`\n\n[Could not read ${file.name}]`);
+    r.readAsText(file);
+   }else{
+    resolve(`\n\n[Attached file: ${file.name} (${file.type||"unknown type"}). This version cannot extract this file's contents in the browser.]`);
+   }
+  });
+ }
+
+ async function sendAiMessage(prefill){
+  if(aiBusy)return;
+
+  const prompt=(typeof prefill==="string"?prefill:aiInput.value).trim();
+  if(!prompt&&!attachedFiles.length)return;
+
+  let fileContext="";
+  for(const file of attachedFiles){
+   fileContext+=await readTextFile(file);
+  }
+
+  const finalMessage=(prompt||"Please help me with the attached file(s).")+fileContext;
+  const displayText=(prompt||"Please help me with the attached file(s).")+
+    (attachedFiles.length?"\n\nAttached: "+attachedFiles.map(f=>f.name).join(", "):"");
+
+  // Build history from previous completed messages only.
+  // The current message is sent separately to the backend.
+  const history=Array.from(aiMessages.querySelectorAll(".ai-message"))
+   .filter(el=>!el.dataset.pending)
+   .map(el=>({
+    role:el.classList.contains("user")?"user":"assistant",
+    content:el.querySelector(".message-content")?.textContent||""
+   }))
+   .filter(item=>item.content.trim())
+   .slice(-12);
+
+  $("aiWelcome").style.display="none";
+  $("aiSuggestions").style.display="none";
+  addAiMessage("user",displayText);
+
+  aiInput.value="";
+  attachedFiles=[];
+  $("aiFileInput").value="";
+  $("aiFileName").textContent="";
+
+  aiBusy=true;
+  $("aiSendBtn").disabled=true;
+
+  const typing=document.createElement("div");
+  typing.className="ai-message assistant";
+  typing.dataset.pending="true";
+
+  const label=document.createElement("span");
+  label.className="message-label";
+  label.textContent="NotePad AI";
+
+  const dots=document.createElement("div");
+  dots.className="ai-typing";
+  dots.innerHTML="<i></i><i></i><i></i>";
+
+  typing.append(label,dots);
+  aiMessages.appendChild(typing);
+  aiContent.scrollTop=aiContent.scrollHeight;
+
+  try{
+   const response=await fetch("/api/chat",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({message:finalMessage,history})
+   });
+
+   const data=await response.json().catch(()=>({}));
+
+   if(!response.ok){
+    throw new Error(
+     data.error||data.detail||data.title||
+     `AI endpoint returned HTTP ${response.status}`
+    );
+   }
+
+   const reply=data.reply??data.output??data.response??data.text;
+
+   if(typeof reply!=="string"||!reply.trim()){
+    throw new Error("The server responded but returned no text.");
+   }
+
+   typing.remove();
+   addAiMessage("assistant",reply.trim());
+
+  }catch(err){
+   typing.remove();
+   console.error("NotePad AI error:",err);
+   addAiMessage(
+    "assistant",
+    "I couldn't generate a response.\n\nError: "+
+    (err.message||"Unknown error")+
+    "\n\nCheck your Vercel deployment logs and the /api/chat endpoint."
+   );
+  }finally{
+   aiBusy=false;
+   $("aiSendBtn").disabled=false;
+   aiInput.focus();
+  }
+ }
+
+ // Store message text separately from the visible speaker label.
+ // This keeps future conversation history in the expected format.
+ const originalAddAiMessage=addAiMessage;
+ addAiMessage=function(role,text){
+  const div=originalAddAiMessage(role,text);
+  const content=div.querySelector("div");
+  if(content)content.classList.add("message-content");
+  return div;
+ };
+
+ $("aiForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  sendAiMessage();
+ });
+
+ aiInput.addEventListener("keydown",e=>{
+  if(e.key==="Enter"&&!e.shiftKey){
+   e.preventDefault();
+   $("aiForm").requestSubmit();
+  }
+ });
 
  render();
 })();
