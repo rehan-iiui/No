@@ -5,6 +5,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NotePad — Glass Notes</title>
+
+<!-- Markdown renderer and HTML sanitizer -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+
 <style>
 :root{
   --text:#f6f7ff;--muted:rgba(245,247,255,.62);--line:rgba(255,255,255,.2);
@@ -22,7 +27,7 @@ body{
    linear-gradient(135deg,#20264d,#414b80 48%,#34304f);
   background-attachment:fixed;
 }
-body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.12),transparent 35%,rgba(255,255,255,.03));}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.12),transparent 35%,rgba(255,255,255,.03))}
 button,input,textarea{font:inherit}
 button{color:inherit;cursor:pointer}
 button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #c6d1ff;outline-offset:3px}
@@ -109,21 +114,86 @@ footer{text-align:center;color:rgba(255,255,255,.42);font-size:11px;margin-top:4
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 
-.ai-screen{position:fixed;inset:0;z-index:30;display:none;flex-direction:column;color:#202338;background:linear-gradient(145deg,#fff 0%,#f7f8fc 48%,#e9ecf5 100%);}
+/* AI screen */
+.ai-screen{position:fixed;inset:0;z-index:30;display:none;flex-direction:column;color:#202338;background:linear-gradient(145deg,#fff 0%,#f7f8fc 48%,#e9ecf5 100%)}
 .ai-screen.open{display:flex}
 .ai-header{height:76px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 clamp(16px,3vw,42px);border-bottom:1px solid rgba(46,53,86,.1);background:rgba(255,255,255,.72);backdrop-filter:blur(24px)}
-.ai-brand{display:flex;align-items:center;gap:11px;font-weight:750;font-size:18px;letter-spacing:-.4px}.ai-brand small{display:block;font-size:11px;color:#777d91;font-weight:500;letter-spacing:0;margin-top:2px}
-.ai-logo{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;color:#696fc2;background:linear-gradient(145deg,#fff,#e8eaff);border:1px solid rgba(115,121,196,.18);box-shadow:0 5px 18px rgba(78,84,155,.12),inset 0 1px 0 #fff}.ai-logo svg{width:23px;height:23px}
-.ai-close{width:40px;height:40px;display:grid;place-items:center;border-radius:13px;border:1px solid rgba(42,48,76,.13);background:rgba(255,255,255,.8);color:#454a60;font-size:25px;transition:.18s}.ai-close:hover{background:#e9eaff;transform:scale(1.04)}
+.ai-brand{display:flex;align-items:center;gap:11px;font-weight:750;font-size:18px;letter-spacing:-.4px}
+.ai-brand small{display:block;font-size:11px;color:#777d91;font-weight:500;letter-spacing:0;margin-top:2px}
+.ai-logo{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;color:#696fc2;background:linear-gradient(145deg,#fff,#e8eaff);border:1px solid rgba(115,121,196,.18);box-shadow:0 5px 18px rgba(78,84,155,.12),inset 0 1px 0 #fff}
+.ai-logo svg{width:23px;height:23px}
+.ai-close{width:40px;height:40px;display:grid;place-items:center;border-radius:13px;border:1px solid rgba(42,48,76,.13);background:rgba(255,255,255,.8);color:#454a60;font-size:25px;transition:.18s}
+.ai-close:hover{background:#e9eaff;transform:scale(1.04)}
 .ai-content{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;overflow:auto;padding:30px 18px 22px}
-.ai-welcome{width:min(700px,100%);margin:auto;text-align:center;padding:28px 0 38px}.ai-big-logo{width:76px;height:76px;margin:0 auto 23px;border-radius:26px;display:grid;place-items:center;color:#7278cc;background:linear-gradient(145deg,#fff,#e8eaff);border:1px solid rgba(120,126,201,.2);box-shadow:0 14px 38px rgba(90,96,165,.14),inset 0 1px 0 #fff}.ai-big-logo svg{width:38px;height:38px}.ai-welcome h1{font-size:clamp(30px,5vw,43px);line-height:1.12;letter-spacing:-1.6px;color:#24283e;margin:0 0 12px}.ai-welcome p{font-size:15px;line-height:1.7;color:#777d91;margin:0 auto;max-width:480px}
-.ai-suggestions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;width:min(620px,100%);margin:0 auto}.ai-suggestion{padding:15px 16px;text-align:left;border:1px solid rgba(63,70,112,.12);border-radius:17px;background:rgba(255,255,255,.76);color:#3b4059;box-shadow:0 5px 18px rgba(45,52,90,.035);transition:.18s}.ai-suggestion:hover{transform:translateY(-2px);border-color:#c9cdf3;background:#fff;box-shadow:0 10px 25px rgba(65,71,125,.09)}.ai-suggestion strong{display:block;font-size:13px;margin-bottom:5px}.ai-suggestion span{font-size:12px;line-height:1.5;color:#85899b}
-.ai-messages{width:min(780px,100%);display:flex;flex-direction:column;gap:18px;margin:0 auto 20px}.ai-message{max-width:88%;padding:15px 17px;border-radius:19px;font-size:14px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}.ai-message.user{align-self:flex-end;background:linear-gradient(135deg,#e7e9ff,#f0f1ff);border:1px solid #d9dcfb;color:#333858;border-bottom-right-radius:6px}.ai-message.assistant{align-self:flex-start;background:rgba(255,255,255,.86);border:1px solid rgba(58,64,100,.1);color:#3c4158;border-bottom-left-radius:6px;box-shadow:0 6px 20px rgba(45,52,90,.045)}.ai-message .message-label{font-size:10px;letter-spacing:.7px;text-transform:uppercase;font-weight:750;color:#8a8fa7;display:block;margin-bottom:5px}.ai-message a{color:#626ac0}
-.ai-bottom{flex-shrink:0;padding:12px 18px max(18px,env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(246,247,252,0),rgba(246,247,252,.94) 20%)}.ai-composer{width:min(820px,100%);margin:auto;border:1px solid rgba(64,70,110,.18);border-radius:23px;background:rgba(255,255,255,.93);box-shadow:0 12px 38px rgba(48,54,97,.1),inset 0 1px 0 #fff;padding:10px 11px 9px;transition:border-color .18s,box-shadow .18s}.ai-composer:focus-within{border-color:#b7bcef;box-shadow:0 12px 38px rgba(80,87,160,.13),0 0 0 3px rgba(140,146,230,.09)}.ai-composer textarea{display:block;width:100%;min-height:48px;max-height:150px;resize:vertical;border:0;outline:0;background:transparent;color:#292d43;padding:10px 10px 8px;font-size:14px;line-height:1.55}.ai-composer textarea::placeholder{color:#9a9eb0}.ai-composer-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 3px 0}.ai-attach{display:flex;align-items:center;gap:8px;padding:9px 11px;border-radius:12px;border:1px solid rgba(58,64,100,.12);background:#f7f8fc;color:#626982;font-size:12px;transition:.18s}.ai-attach:hover{background:#eff0ff;border-color:#d5d8fb}.ai-attach svg{width:17px;height:17px}.ai-send{width:40px;height:40px;display:grid;place-items:center;border:0;border-radius:13px;background:linear-gradient(145deg,#777ed5,#6269bc);color:#fff;box-shadow:0 5px 13px rgba(99,105,190,.25);transition:.18s}.ai-send:hover{transform:translateY(-2px);filter:brightness(1.06)}.ai-send:disabled{opacity:.45;cursor:not-allowed;transform:none}.ai-send svg{width:18px;height:18px}.ai-file-name{font-size:11px;color:#727894;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 8px}.ai-disclaimer{text-align:center;font-size:10px;color:#9a9eb0;margin:10px 0 0}.ai-typing{display:flex;gap:5px;align-items:center;padding:4px 0}.ai-typing i{width:6px;height:6px;border-radius:50%;background:#969bd8;animation:typing 1s infinite ease-in-out}.ai-typing i:nth-child(2){animation-delay:.15s}.ai-typing i:nth-child(3){animation-delay:.3s}@keyframes typing{0%,60%,100%{opacity:.35;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
-@media(max-width:600px){.ai-header{height:66px;padding:0 14px}.ai-content{padding:18px 13px}.ai-suggestions{grid-template-columns:1fr}.ai-welcome{padding:18px 0 28px}.ai-message{max-width:95%}.ai-bottom{padding-left:11px;padding-right:11px}.ai-attach span{display:none}}
+.ai-welcome{width:min(700px,100%);margin:auto;text-align:center;padding:28px 0 38px}
+.ai-big-logo{width:76px;height:76px;margin:0 auto 23px;border-radius:26px;display:grid;place-items:center;color:#7278cc;background:linear-gradient(145deg,#fff,#e8eaff);border:1px solid rgba(120,126,201,.2);box-shadow:0 14px 38px rgba(90,96,165,.14),inset 0 1px 0 #fff}
+.ai-big-logo svg{width:38px;height:38px}
+.ai-welcome h1{font-size:clamp(30px,5vw,43px);line-height:1.12;letter-spacing:-1.6px;color:#24283e;margin:0 0 12px}
+.ai-welcome p{font-size:15px;line-height:1.7;color:#777d91;margin:0 auto;max-width:480px}
+.ai-suggestions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;width:min(620px,100%);margin:0 auto}
+.ai-suggestion{padding:15px 16px;text-align:left;border:1px solid rgba(63,70,112,.12);border-radius:17px;background:rgba(255,255,255,.76);color:#3b4059;box-shadow:0 5px 18px rgba(45,52,90,.035);transition:.18s}
+.ai-suggestion:hover{transform:translateY(-2px);border-color:#c9cdf3;background:#fff;box-shadow:0 10px 25px rgba(65,71,125,.09)}
+.ai-suggestion strong{display:block;font-size:13px;margin-bottom:5px}
+.ai-suggestion span{font-size:12px;line-height:1.5;color:#85899b}
+.ai-messages{width:min(780px,100%);display:flex;flex-direction:column;gap:18px;margin:0 auto 20px}
+.ai-message{max-width:88%;padding:15px 17px;border-radius:19px;font-size:14px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
+.ai-message.user{align-self:flex-end;background:linear-gradient(135deg,#e7e9ff,#f0f1ff);border:1px solid #d9dcfb;color:#333858;border-bottom-right-radius:6px}
+.ai-message.assistant{align-self:flex-start;background:rgba(255,255,255,.86);border:1px solid rgba(58,64,100,.1);color:#3c4158;border-bottom-left-radius:6px;box-shadow:0 6px 20px rgba(45,52,90,.045);white-space:normal}
+.ai-message .message-label{font-size:10px;letter-spacing:.7px;text-transform:uppercase;font-weight:750;color:#8a8fa7;display:block;margin-bottom:5px}
+.ai-message .message-content{min-width:0;overflow-wrap:anywhere}
+.ai-message .message-content>*:first-child{margin-top:0}
+.ai-message .message-content>*:last-child{margin-bottom:0}
+.ai-message .message-content p{margin:8px 0}
+.ai-message .message-content h1,.ai-message .message-content h2,.ai-message .message-content h3,.ai-message .message-content h4{line-height:1.3;color:#292e49;margin:17px 0 8px;font-weight:750;letter-spacing:-.35px}
+.ai-message .message-content h1{font-size:1.45em}
+.ai-message .message-content h2{font-size:1.25em}
+.ai-message .message-content h3{font-size:1.1em}
+.ai-message .message-content h4{font-size:1em}
+.ai-message .message-content ul,.ai-message .message-content ol{padding-left:24px;margin:9px 0}
+.ai-message .message-content li{margin:4px 0}
+.ai-message .message-content blockquote{margin:12px 0;padding:8px 13px;border-left:3px solid #858bd9;background:#f3f4ff;border-radius:0 9px 9px 0;color:#555b78}
+.ai-message .message-content pre{margin:12px 0;padding:13px;border-radius:12px;background:#20243a;color:#f4f5ff;overflow:auto;max-width:100%;white-space:pre}
+.ai-message .message-content pre code{background:transparent;color:inherit;padding:0;border-radius:0;font-size:12px}
+.ai-message .message-content :not(pre)>code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#eef0ff;color:#4c5297;padding:2px 5px;border-radius:5px;font-size:.92em}
+.ai-message .message-content table{width:100%;border-collapse:collapse;display:block;overflow-x:auto;margin:12px 0;font-size:12px}
+.ai-message .message-content th,.ai-message .message-content td{border:1px solid #e0e3f2;padding:8px 10px;text-align:left;min-width:80px}
+.ai-message .message-content th{background:#f0f1ff;font-weight:750}
+.ai-message .message-content hr{border:0;border-top:1px solid #e1e3f0;margin:16px 0}
+.ai-message .message-content img{max-width:100%;height:auto;border-radius:8px}
+.ai-message .message-content a{color:#626ac0;text-decoration:underline;text-underline-offset:2px}
+.ai-bottom{flex-shrink:0;padding:12px 18px max(18px,env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(246,247,252,0),rgba(246,247,252,.94) 20%)}
+.ai-composer{width:min(820px,100%);margin:auto;border:1px solid rgba(64,70,110,.18);border-radius:23px;background:rgba(255,255,255,.93);box-shadow:0 12px 38px rgba(48,54,97,.1),inset 0 1px 0 #fff;padding:10px 11px 9px;transition:border-color .18s,box-shadow .18s}
+.ai-composer:focus-within{border-color:#b7bcef;box-shadow:0 12px 38px rgba(80,87,160,.13),0 0 0 3px rgba(140,146,230,.09)}
+.ai-composer textarea{display:block;width:100%;min-height:48px;max-height:150px;resize:vertical;border:0;outline:0;background:transparent;color:#292d43;padding:10px 10px 8px;font-size:14px;line-height:1.55}
+.ai-composer textarea::placeholder{color:#9a9eb0}
+.ai-composer-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 3px 0}
+.ai-attach{display:flex;align-items:center;gap:8px;padding:9px 11px;border-radius:12px;border:1px solid rgba(58,64,100,.12);background:#f7f8fc;color:#626982;font-size:12px;transition:.18s}
+.ai-attach:hover{background:#eff0ff;border-color:#d5d8fb}
+.ai-attach svg{width:17px;height:17px}
+.ai-send{width:40px;height:40px;display:grid;place-items:center;border:0;border-radius:13px;background:linear-gradient(145deg,#777ed5,#6269bc);color:#fff;box-shadow:0 5px 13px rgba(99,105,190,.25);transition:.18s}
+.ai-send:hover{transform:translateY(-2px);filter:brightness(1.06)}
+.ai-send:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.ai-send svg{width:18px;height:18px}
+.ai-file-name{font-size:11px;color:#727894;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 8px}
+.ai-disclaimer{text-align:center;font-size:10px;color:#9a9eb0;margin:10px 0 0}
+.ai-typing{display:flex;gap:5px;align-items:center;padding:4px 0}
+.ai-typing i{width:6px;height:6px;border-radius:50%;background:#969bd8;animation:typing 1s infinite ease-in-out}
+.ai-typing i:nth-child(2){animation-delay:.15s}
+.ai-typing i:nth-child(3){animation-delay:.3s}
+@keyframes typing{0%,60%,100%{opacity:.35;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+@media(max-width:600px){
+ .ai-header{height:66px;padding:0 14px}
+ .ai-content{padding:18px 13px}
+ .ai-suggestions{grid-template-columns:1fr}
+ .ai-welcome{padding:18px 0 28px}
+ .ai-message{max-width:95%}
+ .ai-bottom{padding-left:11px;padding-right:11px}
+ .ai-attach span{display:none}
+}
 </style>
 </head>
 <body>
+
 <div class="app">
  <header class="topbar">
   <div class="brand"><div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3.8h8l4 4V20a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 5 20V5.3A1.5 1.5 0 0 1 6.5 3.8Z"/><path d="M14 4v4h4M8 12h8M8 16h8"/></svg></div>NotePad</div>
@@ -177,7 +247,20 @@ footer{text-align:center;color:rgba(255,255,255,.42);font-size:11px;margin-top:4
   </div>
   <div class="ai-messages" id="aiMessages" aria-live="polite"></div>
  </div>
- <div class="ai-bottom"><form class="ai-composer" id="aiForm"><textarea id="aiInput" rows="1" placeholder="Message NotePad AI..." aria-label="Message NotePad AI"></textarea><div class="ai-composer-footer"><div style="display:flex;align-items:center;min-width:0;gap:5px"><button class="ai-attach" id="aiAttachBtn" type="button" aria-label="Attach a file"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m21.4 11.1-8.5 8.5a5 5 0 0 1-7.1-7.1l9.2-9.2a3.3 3.3 0 0 1 4.7 4.7l-9.2 9.2a1.7 1.7 0 0 1-2.4-2.4l8.5-8.5"/></svg><span>Attach files</span></button><input id="aiFileInput" type="file" hidden multiple accept=".txt,.md,.csv,.json,.html,.css,.js,.py,.pdf,.doc,.docx,.png,.jpg,.jpeg"><span class="ai-file-name" id="aiFileName"></span></div><button class="ai-send" type="submit" id="aiSendBtn" aria-label="Send message" title="Send message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></button></div></form><div class="ai-disclaimer">AI can make mistakes. Check important information.</div></div>
+ <div class="ai-bottom">
+  <form class="ai-composer" id="aiForm">
+   <textarea id="aiInput" rows="1" placeholder="Message NotePad AI..." aria-label="Message NotePad AI"></textarea>
+   <div class="ai-composer-footer">
+    <div style="display:flex;align-items:center;min-width:0;gap:5px">
+     <button class="ai-attach" id="aiAttachBtn" type="button" aria-label="Attach a file"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m21.4 11.1-8.5 8.5a5 5 0 0 1-7.1-7.1l9.2-9.2a3.3 3.3 0 0 1 4.7 4.7l-9.2 9.2a1.7 1.7 0 0 1-2.4-2.4l8.5-8.5"/></svg><span>Attach files</span></button>
+     <input id="aiFileInput" type="file" hidden multiple accept=".txt,.md,.csv,.json,.html,.css,.js,.py,.pdf,.doc,.docx,.png,.jpg,.jpeg">
+     <span class="ai-file-name" id="aiFileName"></span>
+    </div>
+    <button class="ai-send" type="submit" id="aiSendBtn" aria-label="Send message" title="Send message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></button>
+   </div>
+  </form>
+  <div class="ai-disclaimer">AI can make mistakes. Check important information.</div>
+ </div>
 </div>
 
 <script>
@@ -379,14 +462,36 @@ footer{text-align:center;color:rgba(255,255,255,.42);font-size:11px;margin-top:4
   });
  });
 
+ // Render assistant replies as Markdown, but keep user messages as plain text.
+ // DOMPurify sanitizes generated HTML before it is inserted into the page.
  function addAiMessage(role,text){
   const div=document.createElement("div");
   div.className="ai-message "+role;
+
   const label=document.createElement("span");
   label.className="message-label";
   label.textContent=role==="user"?"You":"NotePad AI";
+
   const content=document.createElement("div");
-  content.textContent=text;
+  content.className="message-content";
+  content.dataset.rawText=String(text??"");
+
+  if(role==="assistant"&&window.marked&&window.DOMPurify){
+   const rendered=window.marked.parse(String(text??""),{
+    gfm:true,
+    breaks:true
+   });
+
+   content.innerHTML=window.DOMPurify.sanitize(rendered);
+
+   content.querySelectorAll("a").forEach(link=>{
+    link.setAttribute("target","_blank");
+    link.setAttribute("rel","noopener noreferrer");
+   });
+  }else{
+   content.textContent=String(text??"");
+  }
+
   div.append(label,content);
   aiMessages.appendChild(div);
   aiContent.scrollTop=aiContent.scrollHeight;
@@ -425,13 +530,13 @@ footer{text-align:center;color:rgba(255,255,255,.42);font-size:11px;margin-top:4
   const displayText=(prompt||"Please help me with the attached file(s).")+
     (attachedFiles.length?"\n\nAttached: "+attachedFiles.map(f=>f.name).join(", "):"");
 
-  // Build history from previous completed messages only.
-  // The current message is sent separately to the backend.
+  // Include previous messages, preserving their original Markdown source.
   const history=Array.from(aiMessages.querySelectorAll(".ai-message"))
    .filter(el=>!el.dataset.pending)
    .map(el=>({
     role:el.classList.contains("user")?"user":"assistant",
-    content:el.querySelector(".message-content")?.textContent||""
+    content:el.querySelector(".message-content")?.dataset.rawText||
+            el.querySelector(".message-content")?.textContent||""
    }))
    .filter(item=>item.content.trim())
    .slice(-12);
@@ -504,16 +609,6 @@ footer{text-align:center;color:rgba(255,255,255,.42);font-size:11px;margin-top:4
    aiInput.focus();
   }
  }
-
- // Store message text separately from the visible speaker label.
- // This keeps future conversation history in the expected format.
- const originalAddAiMessage=addAiMessage;
- addAiMessage=function(role,text){
-  const div=originalAddAiMessage(role,text);
-  const content=div.querySelector("div");
-  if(content)content.classList.add("message-content");
-  return div;
- };
 
  $("aiForm").addEventListener("submit",e=>{
   e.preventDefault();
