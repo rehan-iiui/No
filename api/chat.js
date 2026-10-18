@@ -1,58 +1,51 @@
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    res.setHeader("Allow", "POST");
     return res.status(405).json({
       error: "Method not allowed. Use POST."
     });
   }
 
+  const token = process.env.REPLICATE_API_TOKEN;
+
+  if (!token) {
+    return res.status(500).json({
+      error: "REPLICATE_API_TOKEN is missing from Vercel Environment Variables."
+    });
+  }
+
   try {
-    const token = process.env.REPLICATE_API_TOKEN;
-
-    if (!token) {
-      return res.status(500).json({
-        error: "Missing REPLICATE_API_TOKEN in Vercel environment variables."
-      });
-    }
-
     const { message, history = [] } = req.body || {};
 
-    if (typeof message !== "string" || !message.trim()) {
+    if (!message || typeof message !== "string") {
       return res.status(400).json({
-        error: "Please enter a message."
+        error: "Please provide a message as text."
       });
     }
 
-    const safeHistory = Array.isArray(history)
-      ? history
-          .filter(
-            item =>
-              item &&
-              ["user", "assistant"].includes(item.role) &&
-              typeof item.content === "string"
-          )
-          .slice(-12)
-          .map(item => ({
-            role: item.role,
-            content: item.content.slice(0, 6000)
-          }))
-      : [];
-
-    const input = {
-      system_prompt:
-        "You are a helpful AI assistant inside NotePad. Help with meeting notes, summaries, story writing, studying, and improving text. Be clear, accurate, and friendly. Use readable Markdown when useful.",
-
-      messages: JSON.stringify([
-        ...safeHistory,
-        {
-          role: "user",
-          content: message.trim().slice(0, 12000)
-        }
-      ]),
-
-      max_completion_tokens: 2048
-    };
+    // Build messages as an ARRAY of role/content objects.
+    const messages = [
+      {
+        role: "system",
+        content:
+          "You are a helpful AI assistant inside a notes app. Help with meeting notes, story summaries, writing, studying, and organizing ideas. Be clear and useful."
+      },
+      ...history
+        .filter(
+          item =>
+            item &&
+            ["user", "assistant"].includes(item.role) &&
+            typeof item.content === "string"
+        )
+        .map(item => ({
+          role: item.role,
+          content: item.content
+        })),
+      {
+        role: "user",
+        content: message
+      }
+    ];
 
     const response = await fetch(
       "https://api.replicate.com/v1/models/openai/gpt-4.1-nano/predictions",
@@ -63,126 +56,61 @@ export default async function handler(req, res) {
           "Content-Type": "application/json",
           Prefer: "wait"
         },
-        body: JSON.stringify({ input })
+        body: JSON.stringify({
+          input: {
+            messages: messages
+          }
+        })
       }
     );
 
-    const data = await response.json().catch(() => ({}));
+    const data = await response.json();
 
     if (!response.ok) {
       console.error("Replicate API error:", data);
 
       return res.status(response.status).json({
         error:
-          data.detail ||
-          data.title ||
-          "Replicate could not generate a response. Check your token and model."
+          data?.detail ||
+          data?.title ||
+          data?.error ||
+          "Replicate rejected the request."
       });
     }
 
-    function extractReply(output) {
-      if (typeof output === "string") {
-        return output;
-      }
+    let output = data.output;
 
-      if (Array.isArray(output)) {
-        return output
-          .map(item =>
-            typeof item === "string" ? item : ""
-          )
-          .join("");
-      }
-
-      return "";
+    // Handle models that return an array of output chunks.
+    if (Array.isArray(output)) {
+      output = output.join("");
     }
 
-    let reply = extractReply(data.output);
-
-    if (data.status === "succeeded") {
-      if (!reply.trim()) {
-        return res.status(502).json({
-          error: "Replicate completed but returned no text."
-        });
-      }
-
-      return res.status(200).json({ reply });
+    // Handle models that return an object.
+    if (output && typeof output === "object") {
+      output =
+        output.text ||
+        output.content ||
+        output.message ||
+        JSON.stringify(output);
     }
 
-    if (
-      data.status === "failed" ||
-      data.status === "canceled"
-    ) {
-      console.error("Prediction failed:", data);
+    if (typeof output !== "string" || !output.trim()) {
+      console.error("Unexpected Replicate response:", data);
 
       return res.status(502).json({
-        error: "The AI prediction failed. Please try again."
+        error:
+          "The model returned no text. Check the Replicate model's required input format and deployment logs."
       });
     }
 
-    if (data.status === "starting" || data.status === "processing") {
-      if (!data.urls?.get) {
-        return res.status(502).json({
-          error: "Replicate did not provide a prediction status URL."
-        });
-      }
-
-      for (let attempt = 0; attempt < 20; attempt++) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        const pollResponse = await fetch(data.urls.get, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-
-        const pollData = await pollResponse.json().catch(() => ({}));
-
-        if (!pollResponse.ok) {
-          console.error("Polling error:", pollData);
-
-          return res.status(502).json({
-            error: "Could not retrieve the AI response."
-          });
-        }
-
-        if (pollData.status === "succeeded") {
-          reply = extractReply(pollData.output);
-
-          if (!reply.trim()) {
-            return res.status(502).json({
-              error: "The AI completed but returned no text."
-            });
-          }
-
-          return res.status(200).json({ reply });
-        }
-
-        if (
-          pollData.status === "failed" ||
-          pollData.status === "canceled"
-        ) {
-          console.error("Prediction failed:", pollData);
-
-          return res.status(502).json({
-            error: "The AI prediction failed. Please try again."
-          });
-        }
-      }
-
-      return res.status(504).json({
-        error: "The AI is taking too long. Please try again."
-      });
-    }
-
-    return res.status(502).json({
-      error: "Unexpected prediction status: " + (data.status || "unknown")
+    return res.status(200).json({
+      reply: output.trim()
     });
-
   } catch (error) {
     console.error("Chat API error:", error);
 
     return res.status(500).json({
-      error: "A server error occurred while contacting the AI."
+      error: error.message || "An unexpected server error occurred."
     });
   }
 }
